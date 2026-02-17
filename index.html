@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kevin Gaasch — Cloud Architect & Technology Consultant</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #111118;
+  --bg-card: #16161f;
+  --bg-card-hover: #1c1c28;
+  --accent: #6366f1;
+  --accent-light: #818cf8;
+  --accent-glow: rgba(99, 102, 241, 0.15);
+  --accent-glow-strong: rgba(99, 102, 241, 0.3);
+  --text-primary: #f0f0f5;
+  --text-secondary: #9394a5;
+  --text-muted: #5e5f72;
+  --border: rgba(255,255,255,0.06);
+  --border-hover: rgba(255,255,255,0.12);
+  --gradient-1: linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa);
+  --gradient-2: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s;
+}
+
+nav .nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav .logo {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.03em;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+nav .nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+nav .nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  position: relative;
+}
+
+nav .nav-links a:hover { color: var(--text-primary); }
+
+nav .nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-1);
+  border-radius: 1px;
+  transition: width 0.3s;
+}
+
+nav .nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  background: var(--gradient-2);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--accent-glow-strong);
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 8rem 2rem 4rem;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-bg .orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.4;
+  animation: float 20s ease-in-out infinite;
+}
+
+.hero-bg .orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99,102,241,0.3), transparent 70%);
+  top: -10%;
+  right: -5%;
+}
+
+.hero-bg .orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(139,92,246,0.2), transparent 70%);
+  bottom: 10%;
+  left: -5%;
+  animation-delay: -7s;
+}
+
+.hero-bg .grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black, transparent);
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--accent-glow);
+  border: 1px solid rgba(99,102,241,0.2);
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--accent-light);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.hero-badge .pulse {
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 .gradient-text {
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  color: var(--text-secondary);
+  max-width: 640px;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--gradient-2);
+  color: white;
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--accent-glow-strong);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--text-primary);
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid var(--border-hover);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+  margin-top: 4rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.stat-item .stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-item .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.25rem;
+}
+
+/* Section shared */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 2rem;
+}
+
+.section-header {
+  max-width: 1200px;
+  margin: 0 auto 3.5rem;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  max-width: 600px;
+}
+
+/* Services */
+#services { background: var(--bg-secondary); }
+
+.services-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.service-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-1);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.service-card:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.service-card:hover::before { opacity: 1; }
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-glow);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.service-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.service-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.service-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
+
+/* Experience Timeline */
+.timeline {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2.5rem;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.timeline-item:last-child { border-bottom: none; }
+
+.timeline-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  padding-top: 0.3rem;
+}
+
+.timeline-content h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.2rem;
+}
+
+.timeline-role {
+  color: var(--accent-light);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.timeline-content p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.timeline-highlight {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--accent-glow);
+  border: 1px solid rgba(99,102,241,0.15);
+  padding: 0.35rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--accent-light);
+  margin-top: 1rem;
+}
+
+/* Tech Stack */
+#tech { background: var(--bg-secondary); }
+
+.tech-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.tech-category {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.75rem;
+}
+
+.tech-category h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tech-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tech-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.tech-item:hover {
+  border-color: rgba(99,102,241,0.3);
+  color: var(--accent-light);
+  background: var(--accent-glow);
+}
+
+/* Contact CTA */
+#contact { background: var(--bg-primary); }
+
+.cta-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cta-container h2 {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+
+.cta-container p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-methods {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.contact-link:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+  background: var(--accent-glow);
+}
+
+/* Footer */
+footer {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+footer p {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav .nav-links { display: none; }
+  .hero { padding: 7rem 1.5rem 3rem; }
+  .hero-stats { flex-direction: column; gap: 1.5rem; }
+  .timeline-item { grid-template-columns: 1fr; gap: 0.5rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-secondary { text-align: center; justify-content: center; }
+}
+
+/* Scroll animations */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">KG</div>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#tech">Tech Stack</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="mailto:gaaschk@gmail.com" class="nav-cta">Get in Touch &#8594;</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="grid-lines"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="pulse"></span>
+      Available for new engagements
+    </div>
+    <h1>
+      I build <span class="gradient-text">cloud-native</span><br>
+      systems that scale.
+    </h1>
+    <p class="hero-subtitle">
+      Senior technology consultant with 25+ years architecting enterprise platforms,
+      leading AI initiatives, and driving digital transformations for organizations
+      like Philips and CIGNA.
+    </p>
+    <div class="hero-actions">
+      <a href="mailto:gaaschk@gmail.com" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Start a Conversation
+      </a>
+      <a href="https://linkedin.com/in/kevingaasch" target="_blank" class="btn-secondary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn Profile
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-number">25+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">Global</div>
+        <div class="stat-label">AI CoP Director</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">Cloud</div>
+        <div class="stat-label">Native Architect</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">E2E</div>
+        <div class="stat-label">Solution Delivery</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services">
+  <div class="section-header fade-in">
+    <div class="section-label">// What I Do</div>
+    <h2 class="section-title">Solving complex problems<br>with proven architecture.</h2>
+    <p class="section-subtitle">
+      From cloud strategy to hands-on implementation, I help organizations
+      modernize their technology foundations.
+    </p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card fade-in">
+      <div class="service-icon">&#9729;&#65039;</div>
+      <h3>Cloud Architecture &amp; Modernization</h3>
+      <p>Design and implement scalable cloud-native applications with modern deployment patterns. Migrate legacy systems to resilient, cost-efficient architectures on AWS and Azure.</p>
+      <div class="service-tags">
+        <span class="service-tag">AWS</span>
+        <span class="service-tag">Azure</span>
+        <span class="service-tag">Microservices</span>
+        <span class="service-tag">Cloud-Native</span>
+      </div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-icon">&#129504;</div>
+      <h3>AI Strategy &amp; Data Platforms</h3>
+      <p>Define AI roadmaps, build data pipelines, and integrate machine learning into production systems. Former director of Philips' Global Data &amp; AI Community of Practice.</p>
+      <div class="service-tags">
+        <span class="service-tag">ML Pipelines</span>
+        <span class="service-tag">AI Governance</span>
+        <span class="service-tag">ETL</span>
+        <span class="service-tag">Data Strategy</span>
+      </div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-icon">&#128640;</div>
+      <h3>Technical Leadership &amp; Delivery</h3>
+      <p>Lead cross-functional engineering teams through large-scale digital transformations. Establish standards, mentor engineers, and bridge the gap between business goals and technical execution.</p>
+      <div class="service-tags">
+        <span class="service-tag">Agile</span>
+        <span class="service-tag">Team Leadership</span>
+        <span class="service-tag">DevOps</span>
+        <span class="service-tag">Mentoring</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experience -->
+<section id="experience">
+  <div class="section-header fade-in">
+    <div class="section-label">// Track Record</div>
+    <h2 class="section-title">Where I've made an impact.</h2>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item fade-in">
+      <div class="timeline-date">2023 &#8212; Present</div>
+      <div class="timeline-content">
+        <h3>About Objects</h3>
+        <div class="timeline-role">Technology Consultant</div>
+        <p>Architecting n-tier cloud-native applications for enterprise clients across diverse technology stacks. Partnering with stakeholders to translate business requirements into high-performance technical solutions and providing strategic guidance on cloud infrastructure, DevOps, and application modernization.</p>
+      </div>
+    </div>
+    <div class="timeline-item fade-in">
+      <div class="timeline-date">2016 &#8212; 2024</div>
+      <div class="timeline-content">
+        <h3>Philips</h3>
+        <div class="timeline-role">Senior Architect</div>
+        <p>Directed the Global Data &amp; AI Community of Practice across Philips' worldwide AI initiatives. Led the Data &amp; AI team within Sleep &amp; Respiratory Care, architecting the SmartSleep Headband &#8212; a first-of-its-kind consumer health product using ML to process EEG signals for real-time sleep intervention. Designed AI-driven alerting systems for connected-care platforms serving respiratory patients.</p>
+        <div class="timeline-highlight">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Global AI Community of Practice Director
+        </div>
+      </div>
+    </div>
+    <div class="timeline-item fade-in">
+      <div class="timeline-date">2012 &#8212; 2016</div>
+      <div class="timeline-content">
+        <h3>CIGNA</h3>
+        <div class="timeline-role">Technical Architect</div>
+        <p>Designed RESTful microservices with Spring Boot and MongoDB, built ETL pipelines with Pentaho Kettle and Spring Integration, and bridged geographically distributed teams to maintain consistent architecture standards and cross-team collaboration.</p>
+      </div>
+    </div>
+    <div class="timeline-item fade-in">
+      <div class="timeline-date">2001 &#8212; 2012</div>
+      <div class="timeline-content">
+        <h3>Cology &amp; Panhandle Plains</h3>
+        <div class="timeline-role">Development Lead &amp; Senior Technical Architect</div>
+        <p>Architected large-scale student loan servicing platforms, led development teams, introduced CI/CD pipelines, and drove the digital transformation of legacy infrastructure to modern architectures using Hibernate, Spring, and Apache CXF.</p>
+      </div>
+    </div>
+    <div class="timeline-item fade-in">
+      <div class="timeline-date">1997 &#8212; 2001</div>
+      <div class="timeline-content">
+        <h3>Anderson Merchandisers</h3>
+        <div class="timeline-role">Senior Java Developer</div>
+        <p>Founded and led the organization's first Java development team, establishing coding standards and delivering POS systems, supply chain automation, and digital content transformation solutions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tech Stack -->
+<section id="tech">
+  <div class="section-header fade-in">
+    <div class="section-label">// Tech Stack</div>
+    <h2 class="section-title">Tools of the trade.</h2>
+  </div>
+  <div class="tech-grid">
+    <div class="tech-category fade-in">
+      <h3>&#9729;&#65039; Cloud &amp; Infrastructure</h3>
+      <div class="tech-items">
+        <span class="tech-item">AWS</span>
+        <span class="tech-item">Azure</span>
+        <span class="tech-item">Cloud-Native</span>
+        <span class="tech-item">Microservices</span>
+        <span class="tech-item">RESTful APIs</span>
+        <span class="tech-item">DevOps</span>
+        <span class="tech-item">CI/CD</span>
+      </div>
+    </div>
+    <div class="tech-category fade-in">
+      <h3>&#9889; Languages &amp; Frameworks</h3>
+      <div class="tech-items">
+        <span class="tech-item">Java</span>
+        <span class="tech-item">Spring Boot</span>
+        <span class="tech-item">Spring Integration</span>
+        <span class="tech-item">Hibernate</span>
+        <span class="tech-item">Apache CXF</span>
+        <span class="tech-item">Apache Wicket</span>
+      </div>
+    </div>
+    <div class="tech-category fade-in">
+      <h3>&#129504; AI &amp; Data</h3>
+      <div class="tech-items">
+        <span class="tech-item">Machine Learning</span>
+        <span class="tech-item">EEG Signal Processing</span>
+        <span class="tech-item">Data Pipelines</span>
+        <span class="tech-item">ETL</span>
+        <span class="tech-item">Pentaho Kettle</span>
+        <span class="tech-item">AI Strategy</span>
+      </div>
+    </div>
+    <div class="tech-category fade-in">
+      <h3>&#128451;&#65039; Databases &amp; Storage</h3>
+      <div class="tech-items">
+        <span class="tech-item">MongoDB</span>
+        <span class="tech-item">SQL Server</span>
+        <span class="tech-item">n-Tier Architecture</span>
+        <span class="tech-item">Data Platforms</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="cta-container fade-in">
+    <div class="section-label">// Let's Work Together</div>
+    <h2>Ready to build<br><span style="background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">something great?</span></h2>
+    <p>I'm currently available for consulting engagements, architecture reviews, and technical leadership roles.</p>
+    <a href="mailto:gaaschk@gmail.com" class="btn-primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      gaaschk@gmail.com
+    </a>
+    <div class="contact-methods">
+      <a href="https://linkedin.com/in/kevingaasch" target="_blank" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="mailto:gaaschk@gmail.com" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email
+      </a>
+      <span class="contact-link" style="cursor: default;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Pittsburgh, PA
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2026 Kevin Gaasch. Built with purpose.</p>
+</footer>
+
+<script>
+// Scroll-triggered fade-in animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, index) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, index * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Nav scroll effect
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 50) {
+    nav.style.borderBottomColor = 'rgba(255,255,255,0.08)';
+  } else {
+    nav.style.borderBottomColor = 'rgba(255,255,255,0.04)';
+  }
+});
+</script>
+
+</body>
+</html>
